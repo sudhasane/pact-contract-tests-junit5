@@ -1,0 +1,43 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+
+}
+
+plugins {
+	id 'au.com.dius.pact' version '4.0.2'
+}
+
+pact {
+	publish {
+		pactDirectory = 'build/pacts'
+		pactBrokerUrl = 'http://localhost:8321'
+	}
+}
+
+group = 'com.demo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	testImplementation 'au.com.dius:pact-jvm-consumer-junit5:4.0.2'
+	testImplementation 'org.assertj:assertj-core:3.6.2'
+	testImplementation 'au.com.dius:pact-jvm-provider-junit5:4.0.2'
+
+}
+
+
+test {
+	useJUnitPlatform()
+	systemProperties['pact.rootDir'] = "$buildDir/pacts"
+}
